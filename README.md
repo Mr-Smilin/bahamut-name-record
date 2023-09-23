@@ -17,6 +17,7 @@
 - 0.2： 調整代碼，jquery 全面替換成純 javascript，html結構生成代碼調整  
 - 0.3： 調整 localStorage 存放規則  
 - 0.4： 嘗試改用 localforage 存放資料
+- 0.5： 嘗試改用 indexedDB 存放資料
   
 </details>
   
@@ -25,6 +26,7 @@
 目前實現
 
 - [x] 發文者名稱紀錄、歷史查詢(如果有存)
+- [x] localStorage 成 indexedDB
 
 <br>
 
@@ -34,4 +36,3 @@
 - [ ] 巴友留言納入記錄條件
 - [ ] 查詢功能
 - [ ] 備註替換暱稱功能
-- [ ] 替換 localStorage，上限 5M 不太夠

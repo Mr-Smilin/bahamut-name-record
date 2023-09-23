@@ -1,12 +1,11 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
 // @namespace    https://forum.gamer.com.tw
-// @version      0.4
+// @version      0.5
 // @description  發文者暱稱紀錄
 // @author       You
 // @match        https://forum.gamer.com.tw/C.php*
 // @match        https://forum.gamer.com.tw/Co.php*
-// @require      https://raw.githubusercontent.com/mozilla/localForage/master/dist/localforage.min.js
 // @grant        none
 // @license MIT
 // ==/UserScript==
@@ -15,8 +14,63 @@
 	if (typeof Storage === "undefined") return;
 	if (!document.querySelector(".c-post__header__author")) return;
 
+	//#region indexedDB
+	const dbName = "nameRecordDB";
+	const storeName = "nameRecordStore";
+	const dbVersion = 1;
+
+	function openDB() {
+		return new Promise((resolve, reject) => {
+			const openRequest = indexedDB.open(dbName, dbVersion);
+			openRequest.onerror = function (event) {
+				reject("Error opening DB");
+			};
+			openRequest.onsuccess = function (event) {
+				resolve(event.target.result);
+			};
+			openRequest.onupgradeneeded = function (event) {
+				const db = event.target.result;
+				if (!db.objectStoreNames.contains(storeName)) {
+					db.createObjectStore(storeName, { keyPath: "id" });
+				}
+			};
+		});
+	}
+
+	async function setItem(key, value) {
+		const db = await openDB();
+		const transaction = db.transaction(storeName, "readwrite");
+		const store = transaction.objectStore(storeName);
+		return new Promise((resolve, reject) => {
+			const request = store.put({ id: key, value: value });
+			request.onsuccess = function () {
+				resolve();
+			};
+			request.onerror = function (event) {
+				reject("Error storing data");
+			};
+		});
+	}
+
+	async function getItem(key) {
+		const db = await openDB();
+		const transaction = db.transaction(storeName, "readonly");
+		const store = transaction.objectStore(storeName);
+		return new Promise((resolve, reject) => {
+			const request = store.get(key);
+			request.onsuccess = function (event) {
+				resolve(event.target.result ? event.target.result.value : null);
+			};
+			request.onerror = function (event) {
+				reject("Error fetching data");
+			};
+		});
+	}
+	//#endregion
+
 	const localStorageName = "record-name";
 
+	//#region DOM 生成
 	function nameList(localStor) {
 		// 創建 table 元素
 		const table = document.createElement("table");
@@ -83,7 +137,9 @@
 
 		return div;
 	};
+	//#endregion
 
+	//#region 資料管理 api
 	function initUser(userid, username, localStor) {
 		localStor = {
 			...localStor,
@@ -99,15 +155,8 @@
 				],
 			},
 		};
-		return localforage
-			.setItem(localStorageName, localStor)
-			.then((localStor) => {
-				return localStor;
-			})
-			.catch((err) => {
-				console.err("初始化資料異常!", err);
-				return localStor;
-			});
+		setItem(localStorageName, JSON.stringify(localStor));
+		return localStor;
 	}
 
 	function addUsername(userid, username, localStor) {
@@ -116,15 +165,8 @@
 			name: username,
 			day: new Date().toISOString().split("T")[0],
 		});
-		return localforage
-			.setItem(localStorageName, localStor)
-			.then((localStor) => {
-				return localStor;
-			})
-			.catch((err) => {
-				console.err("新增資料異常!", err);
-				return localStor;
-			});
+		setItem(localStorageName, JSON.stringify(localStor));
+		return localStor;
 	}
 
 	function checkLocalStor(userid, username, localStor) {
@@ -139,7 +181,7 @@
 	}
 
 	async function searchUsername(userid, username) {
-		let localStor = await localforage.getItem(localStorageName);
+		let localStor = JSON.parse(await getItem(localStorageName));
 		if (!localStor || localStor[userid] === undefined) {
 			localStor = initUser(userid, username, localStor);
 		} else {
@@ -147,16 +189,17 @@
 		}
 		return localStor;
 	}
+	//#endregion
 
 	// dom 渲染
-	function render() {
+	async function render() {
 		const dom = document.querySelectorAll(".c-post__header__author");
-		dom.forEach(async (d) => {
+		for (let d of dom) {
 			const userid = d.querySelector(".userid").textContent;
 			const username = d.querySelector(".username").textContent.trim();
 			const localStor = await searchUsername(userid, username);
 			d.appendChild(mainDiv(localStor[userid]));
-		});
+		}
 	}
 
 	// 歷史紀錄 click
