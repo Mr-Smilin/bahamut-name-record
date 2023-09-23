@@ -2,7 +2,7 @@
 // @name         巴友暱稱紀錄
 // @namespace    https://forum.gamer.com.tw
 // @version      0.7
-// @description  發文者暱稱紀錄
+// @description  對天尊特攻寶具
 // @author       You
 // @match        https://forum.gamer.com.tw/C.php*
 // @match        https://forum.gamer.com.tw/Co.php*
