@@ -8,7 +8,7 @@
 [油猴](https://greasyfork.org/zh-TW/scripts/475916-%E5%B7%B4%E5%8F%8B%E6%9A%B1%E7%A8%B1%E7%B4%80%E9%8C%84)  
 [Github](https://github.com/Mr-Smilin/bahamut-name-record)
 
-當前版本： 0.3
+當前版本： 0.5
 
 <details> <summary>版本紀錄</summary>  
   <br>  
