@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
 // @namespace    https://forum.gamer.com.tw
-// @version      0.2
+// @version      0.3
 // @description  發文者暱稱紀錄
 // @author       You
 // @match        https://forum.gamer.com.tw/C.php*
