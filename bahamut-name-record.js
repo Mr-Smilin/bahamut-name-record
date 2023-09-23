@@ -51,7 +51,7 @@
 		td.textContent = text;
 
 		// 設置 td 的 padding
-		td.style.padding = "8px"; // 例如，左右各8px的間隔
+		td.style.padding = "8px";
 
 		return td;
 	}
@@ -127,6 +127,7 @@
 		return localStor;
 	}
 
+	// dom 渲染
 	function render() {
 		const dom = document.querySelectorAll(".c-post__header__author");
 		dom.forEach((d) => {
@@ -137,6 +138,7 @@
 		});
 	}
 
+	// 歷史紀錄 click
 	const showMessage = function (element) {
 		const nextElement = element.nextElementSibling;
 		if (element.getAttribute("isshow") === "true") {
