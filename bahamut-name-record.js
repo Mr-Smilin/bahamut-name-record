@@ -1,42 +1,71 @@
 if (typeof Storage === "undefined") return;
-if ($(".c-post__header__author").get(0) === undefined) return;
+if (!document.querySelector(".c-post__header__author")) return;
 
-// <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
-/*
-usernames = {
-    userid: {
-        lastUpdated: new Date().toISOString().split('T')[0],
-		isRead: true,
-        data: [
-        {
-            name: "John",
-            day: "2020-01-01", new Date().toISOString().split('T')[0]
-        }
-    ]}
-}
-*/
+function nameList(localStor) {
+	// 創建 table 元素
+	const table = document.createElement("table");
+	table.className = "name-list themepage-entrance__preview";
+	table.style.whiteSpace = "nowrap";
+	table.style.display = "none";
 
-const clickButton = `<button type="button" class="floor tippy-gpbp" isshow=false onclick="showMessage(this)">歷史紀錄</button>`;
+	// 創建 tbody 元素
+	const tbody = document.createElement("tbody");
+	table.appendChild(tbody);
 
-const nameList = (localStor) => {
-	let listString = ``;
+	// 創建標題行
+	const headerRow = document.createElement("tr");
+	const headerNameCell = createTableCell("名字");
+	const headerDayCell = createTableCell("發現時間(本地)");
+	headerRow.appendChild(headerNameCell);
+	headerRow.appendChild(headerDayCell);
+	tbody.appendChild(headerRow);
+
+	// 根據 localStor.data 創建表格的每一行
 	localStor.data.forEach((element) => {
-		listString += `<tr><td>${element.name}</td><td>${element.day}</td></tr>`;
+		const row = document.createElement("tr");
+		const nameCell = createTableCell(element.name);
+		const dayCell = createTableCell(element.day);
+		row.appendChild(nameCell);
+		row.appendChild(dayCell);
+		tbody.appendChild(row);
 	});
-	return `<table class="name-list themepage-entrance__preview" style="display: none; white-space:nowrap;" width="98%" border="1" cellspacing="1" cellpadding="1"><tbody>
-    <tr>
-        <td>名字</td>
-        <td>發現時間(本地)</td>
-    </tr>
-    ${listString}
-    </tbody></table>`;
-};
+
+	return table;
+}
+
+function createTableCell(text) {
+	const td = document.createElement("td");
+	td.textContent = text;
+
+	// 設置 td 的 padding
+	td.style.padding = "8px"; // 例如，左右各8px的間隔
+
+	return td;
+}
+
+function clickButton() {
+	const button = document.createElement("button");
+	button.type = "button";
+	button.className = "floor tippy-gpbp";
+	button.setAttribute("isshow", "false");
+	button.onclick = function () {
+		showMessage(this);
+	};
+	button.textContent = "歷史紀錄";
+	return button;
+}
 
 const mainDiv = (localStor) => {
 	const names = nameList(localStor);
-	return $(
-		`<div class="name-list-main-div" style="position:relative;display:inline;">${clickButton}${names}</div>`
-	);
+	const div = document.createElement("div");
+	div.className = "name-list-main-div";
+	div.style.position = "relative";
+	div.style.display = "inline";
+
+	div.appendChild(clickButton());
+	div.appendChild(names);
+
+	return div;
 };
 
 function initLocalStor(userid, username) {
@@ -85,34 +114,29 @@ function searchUsername(userid, username) {
 	return localStor;
 }
 
-// 畫面渲染
 function render() {
-	const dom = $(".c-post__header__author");
-	for (d of dom) {
-		const userid = $(d).find(".userid").text();
-		const username = $(d)
-			.find(".username")
-			.text()
-			.replace(/(^[\s]*)|([\s]*$)/g, "");
+	const dom = document.querySelectorAll(".c-post__header__author");
+	dom.forEach((d) => {
+		const userid = d.querySelector(".userid").textContent;
+		const username = d.querySelector(".username").textContent.trim();
 		const localStor = searchUsername(userid, username);
-		$(d).append(mainDiv(localStor));
-	}
+		d.appendChild(mainDiv(localStor));
+	});
 }
 
-// js
-const showMessage = function showMessage(element) {
-	if ($(element).attr("isshow") === "true") {
-		$(element).next(".name-list").css("display", "none");
-		$(element).attr("isshow", "false");
+const showMessage = function (element) {
+	const nextElement = element.nextElementSibling;
+	if (element.getAttribute("isshow") === "true") {
+		nextElement.style.display = "none";
+		element.setAttribute("isshow", "false");
 	} else {
-		$(element).next(".name-list").css("display", "flex");
-		$(element).attr("isshow", "true");
+		nextElement.style.display = "flex";
+		element.setAttribute("isshow", "true");
 	}
 };
 
-$("body").append(
-	$(`<script>
-        ${showMessage}
-    </script>`)
-);
+const scriptTag = document.createElement("script");
+scriptTag.innerHTML = `${showMessage}`;
+document.body.appendChild(scriptTag);
+
 render();
