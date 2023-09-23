@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
 // @namespace    https://forum.gamer.com.tw
-// @version      0.5
+// @version      0.6
 // @description  發文者暱稱紀錄
 // @author       You
 // @match        https://forum.gamer.com.tw/C.php*
@@ -155,7 +155,7 @@
 				],
 			},
 		};
-		setItem(localStorageName, JSON.stringify(localStor));
+		setItem(localStorageName, localStor);
 		return localStor;
 	}
 
@@ -165,7 +165,7 @@
 			name: username,
 			day: new Date().toISOString().split("T")[0],
 		});
-		setItem(localStorageName, JSON.stringify(localStor));
+		setItem(localStorageName, localStor);
 		return localStor;
 	}
 
@@ -181,7 +181,7 @@
 	}
 
 	async function searchUsername(userid, username) {
-		let localStor = JSON.parse(await getItem(localStorageName));
+		let localStor = await getItem(localStorageName);
 		if (!localStor || localStor[userid] === undefined) {
 			localStor = initUser(userid, username, localStor);
 		} else {

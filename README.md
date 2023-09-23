@@ -8,7 +8,7 @@
 [油猴](https://greasyfork.org/zh-TW/scripts/475916-%E5%B7%B4%E5%8F%8B%E6%9A%B1%E7%A8%B1%E7%B4%80%E9%8C%84)  
 [Github](https://github.com/Mr-Smilin/bahamut-name-record)
 
-當前版本： 0.5
+當前版本： 0.6
 
 <details> <summary>版本紀錄</summary>  
   <br>  
@@ -18,6 +18,7 @@
 - 0.3： 調整 localStorage 存放規則  
 - 0.4： 嘗試改用 localforage 存放資料
 - 0.5： 嘗試改用 indexedDB 存放資料
+- 0.6： 取消序列化存放
   
 </details>
   
@@ -26,7 +27,7 @@
 目前實現
 
 - [x] 發文者名稱紀錄、歷史查詢(如果有存)
-- [x] localStorage 成 indexedDB
+- [x] localStorage 棄用，改成 indexedDB
 
 <br>
 
