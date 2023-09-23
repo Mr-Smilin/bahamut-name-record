@@ -1,8 +1,12 @@
-# bahamut-name-record
+# 巴友暱稱紀錄
 
-巴友名字紀錄
+作用範圍： C 頁、內文頁面  
+發布日期： 2023/09/23  
+最後修改日期： 2023/09/23  
+作者： smilin （微笑）
 
-[油猴](https://greasyfork.org/zh-TW/scripts/475916-%E5%B7%B4%E5%8F%8B%E6%9A%B1%E7%A8%B1%E7%B4%80%E9%8C%84)
+[油猴](https://greasyfork.org/zh-TW/scripts/475916-%E5%B7%B4%E5%8F%8B%E6%9A%B1%E7%A8%B1%E7%B4%80%E9%8C%84)  
+[Github](https://github.com/Mr-Smilin/bahamut-name-record)
 
 當前版本： 0.2
 
