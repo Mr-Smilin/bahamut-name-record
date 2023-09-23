@@ -14,6 +14,8 @@
 	if (typeof Storage === "undefined") return;
 	if (!document.querySelector(".c-post__header__author")) return;
 
+	const localStorageName = "record-name";
+
 	function nameList(localStor) {
 		// 創建 table 元素
 		const table = document.createElement("table");
@@ -81,34 +83,38 @@
 		return div;
 	};
 
-	function initLocalStor(userid, username) {
-		const localStor = {
-			lastUpdated: null,
-			isRead: true,
-			data: [
-				{
-					name: username,
-					day: new Date().toISOString().split("T")[0],
-				},
-			],
+	function initUser(userid, username, localStor) {
+		localStor = {
+			...localStor,
+			[userid]: {
+				lastUpdated: null,
+				isRead: true,
+				noteName: "",
+				data: [
+					{
+						name: username,
+						day: new Date().toISOString().split("T")[0],
+					},
+				],
+			},
 		};
-		localStorage.setItem(userid, JSON.stringify(localStor));
+		localStorage.setItem(localStorageName, JSON.stringify(localStor));
 		return localStor;
 	}
 
 	function addUsername(userid, username, localStor) {
-		localStor.lastUpdated = new Date().toISOString().split("T")[0];
-		localStor.data.push({
+		localStor[userid].lastUpdated = new Date().toISOString().split("T")[0];
+		localStor[userid].data.push({
 			name: username,
 			day: new Date().toISOString().split("T")[0],
 		});
-		localStorage.setItem(userid, JSON.stringify(localStor));
+		localStorage.setItem(localStorageName, JSON.stringify(localStor));
 		return localStor;
 	}
 
 	function checkLocalStor(userid, username, localStor) {
 		let isUse = false;
-		localStor.data.forEach((element) => {
+		localStor[userid].data.forEach((element) => {
 			if (element.name === username) isUse = true;
 		});
 		if (!isUse) {
@@ -118,9 +124,9 @@
 	}
 
 	function searchUsername(userid, username) {
-		let localStor = JSON.parse(localStorage.getItem(userid));
-		if (localStor === null) {
-			localStor = initLocalStor(userid, username);
+		let localStor = JSON.parse(localStorage.getItem(localStorageName));
+		if (localStor[userid] === undefined) {
+			localStor = initUser(userid, username, localStor);
 		} else {
 			localStor = checkLocalStor(userid, username, localStor);
 		}
@@ -134,7 +140,7 @@
 			const userid = d.querySelector(".userid").textContent;
 			const username = d.querySelector(".username").textContent.trim();
 			const localStor = searchUsername(userid, username);
-			d.appendChild(mainDiv(localStor));
+			d.appendChild(mainDiv(localStor[userid]));
 		});
 	}
 

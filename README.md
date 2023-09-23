@@ -8,13 +8,14 @@
 [油猴](https://greasyfork.org/zh-TW/scripts/475916-%E5%B7%B4%E5%8F%8B%E6%9A%B1%E7%A8%B1%E7%B4%80%E9%8C%84)  
 [Github](https://github.com/Mr-Smilin/bahamut-name-record)
 
-當前版本： 0.2
+當前版本： 0.3
 
 <details> <summary>版本紀錄</summary>  
   <br>  
   
 - 0.1： 初版上傳  
 - 0.2： 調整代碼，jquery 全面替換成純 javascript，html結構生成代碼調整  
+- 0.3： 調整 localStorage 存放規則
   
 </details>
   
