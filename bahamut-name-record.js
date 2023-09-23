@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
 // @namespace    https://forum.gamer.com.tw
-// @version      0.3
+// @version      0.4
 // @description  發文者暱稱紀錄
 // @author       You
 // @match        https://forum.gamer.com.tw/C.php*
 // @match        https://forum.gamer.com.tw/Co.php*
+// @require      https://raw.githubusercontent.com/mozilla/localForage/master/dist/localforage.min.js
 // @grant        none
 // @license MIT
 // ==/UserScript==
@@ -98,8 +99,15 @@
 				],
 			},
 		};
-		localStorage.setItem(localStorageName, JSON.stringify(localStor));
-		return localStor;
+		return localforage
+			.setItem(localStorageName, localStor)
+			.then((localStor) => {
+				return localStor;
+			})
+			.catch((err) => {
+				console.err("初始化資料異常!", err);
+				return localStor;
+			});
 	}
 
 	function addUsername(userid, username, localStor) {
@@ -108,8 +116,15 @@
 			name: username,
 			day: new Date().toISOString().split("T")[0],
 		});
-		localStorage.setItem(localStorageName, JSON.stringify(localStor));
-		return localStor;
+		return localforage
+			.setItem(localStorageName, localStor)
+			.then((localStor) => {
+				return localStor;
+			})
+			.catch((err) => {
+				console.err("新增資料異常!", err);
+				return localStor;
+			});
 	}
 
 	function checkLocalStor(userid, username, localStor) {
@@ -123,9 +138,9 @@
 		return localStor;
 	}
 
-	function searchUsername(userid, username) {
-		let localStor = JSON.parse(localStorage.getItem(localStorageName));
-		if (localStor[userid] === undefined) {
+	async function searchUsername(userid, username) {
+		let localStor = await localforage.getItem(localStorageName);
+		if (!localStor || localStor[userid] === undefined) {
 			localStor = initUser(userid, username, localStor);
 		} else {
 			localStor = checkLocalStor(userid, username, localStor);
@@ -136,16 +151,16 @@
 	// dom 渲染
 	function render() {
 		const dom = document.querySelectorAll(".c-post__header__author");
-		dom.forEach((d) => {
+		dom.forEach(async (d) => {
 			const userid = d.querySelector(".userid").textContent;
 			const username = d.querySelector(".username").textContent.trim();
-			const localStor = searchUsername(userid, username);
+			const localStor = await searchUsername(userid, username);
 			d.appendChild(mainDiv(localStor[userid]));
 		});
 	}
 
 	// 歷史紀錄 click
-	const showMessage = function (element) {
+	const showMessage = function showMessage(element) {
 		const nextElement = element.nextElementSibling;
 		if (element.getAttribute("isshow") === "true") {
 			nextElement.style.display = "none";
@@ -155,10 +170,6 @@
 			element.setAttribute("isshow", "true");
 		}
 	};
-
-	const scriptTag = document.createElement("script");
-	scriptTag.innerHTML = `${showMessage}`;
-	document.body.appendChild(scriptTag);
 
 	render();
 })();

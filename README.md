@@ -15,7 +15,8 @@
   
 - 0.1： 初版上傳  
 - 0.2： 調整代碼，jquery 全面替換成純 javascript，html結構生成代碼調整  
-- 0.3： 調整 localStorage 存放規則
+- 0.3： 調整 localStorage 存放規則  
+- 0.4： 嘗試改用 localforage 存放資料
   
 </details>
   
