@@ -1,13 +1,15 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
-// @namespace    https://smilin.net
-// @version      0.9
 // @description  對天尊特攻寶具
+// @namespace    https://smilin.net
 // @author       smilin
+// @version      0.9
+// @license MIT
+// @homepage     https://smilin.net
 // @match        https://forum.gamer.com.tw/C.php*
 // @match        https://forum.gamer.com.tw/Co.php*
+// @icon         https://forum.gamer.com.tw/favicon.ico
 // @grant        none
-// @license MIT
 // ==/UserScript==
 
 (function () {
