@@ -8,8 +8,8 @@
 [油猴](https://greasyfork.org/zh-TW/scripts/475916-%E5%B7%B4%E5%8F%8B%E6%9A%B1%E7%A8%B1%E7%B4%80%E9%8C%84)  
 [Github](https://github.com/Mr-Smilin/bahamut-name-record)
 
-當前版本： 0.9  
-更新說明： 改名觸發高亮提醒
+當前版本： 0.10  
+更新說明： 修正資料更新問題
 
 <details> <summary>版本紀錄</summary>  
   <br>  
@@ -23,6 +23,7 @@
 - 0.7： 留言納入紀錄條件、按鈕&部份 css 調整  
 - 0.8： 調整開頭邏輯，如不支援 DB 則不啟用此插件   
 - 0.9： 改名觸發高亮提醒   
+- 0.10： 修正資料更新問題   
   
 </details>
   

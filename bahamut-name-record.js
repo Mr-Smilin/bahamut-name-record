@@ -3,7 +3,7 @@
 // @description  對天尊特攻寶具
 // @namespace    https://smilin.net
 // @author       smilin
-// @version      0.9
+// @version      0.10
 // @license MIT
 // @homepage     https://home.gamer.com.tw/homeindex.php?owner=a33073307
 // @match        https://forum.gamer.com.tw/C.php*
@@ -73,7 +73,7 @@
 	const localStorageName = "record-name";
 
 	//#region DOM 生成
-	function nameList(localStor) {
+	function nameList(localStor, userid) {
 		// 創建 table 元素
 		const table = document.createElement("table");
 		table.className = "name-list themepage-entrance__preview";
@@ -93,7 +93,7 @@
 		tbody.appendChild(headerRow);
 
 		// 根據 localStor.data 創建表格的每一行
-		localStor.data.forEach((element) => {
+		localStor[userid].data.forEach((element) => {
 			const row = document.createElement("tr");
 			const nameCell = createTableCell(element.name);
 			const dayCell = createTableCell(element.day);
@@ -115,7 +115,7 @@
 		return td;
 	}
 
-	function clickButton(localStor) {
+	function clickButton(localStor, userid) {
 		const button = document.createElement("button");
 		button.type = "button";
 		button.className = "usertitle";
@@ -123,22 +123,22 @@
 		button.style.borderWidth = "0px";
 		button.style.padding = "1px 6px";
 		// 未讀高亮
-		if (!localStor.isRead) {
+		if (!localStor[userid].isRead) {
 			notReadStyle(button, 0);
 		}
 		button.onclick = function () {
 			showMessage(this);
 			// 已讀關閉高亮
-			localStor.isRead = true;
+			userDataIsReal(localStor, userid);
 			isReadStyle(button, 0);
 		};
 		button.textContent = "歷史紀錄";
 		return button;
 	}
 
-	const mainDiv = (localStor) => {
-		const names = nameList(localStor);
-		const buttoned = clickButton(localStor);
+	const mainDiv = (localStor, userid) => {
+		const names = nameList(localStor, userid);
+		const buttoned = clickButton(localStor, userid);
 		const div = document.createElement("div");
 		div.className = "name-list-main-div";
 		div.style.position = "relative";
@@ -150,7 +150,7 @@
 		return div;
 	};
 
-	const replyDiv = (localStor, contentUser) => {
+	const replyDiv = (localStor, userid, contentUser) => {
 		const div = document.createElement("div");
 		div.className = "name-list-reply-div";
 		div.style.position = "relative";
@@ -159,12 +159,12 @@
 		const readText = document.createElement("span");
 
 		// 未讀高亮
-		if (!localStor.isRead) notReadStyle(readText, 1);
+		if (!localStor[userid].isRead) notReadStyle(readText, 1);
 
-		const names = nameList(localStor);
+		const names = nameList(localStor, userid);
 		setHoverShow(contentUser, names, () => {
 			// 已讀關閉高亮
-			localStor.isRead = true;
+			userDataIsReal(localStor, userid);
 			isReadStyle(readText, 1);
 		});
 
@@ -223,6 +223,7 @@
 		localStor = {
 			...localStor,
 			[userid]: {
+				userid: userid,
 				lastUpdated: null,
 				isRead: true,
 				noteName: "",
@@ -245,6 +246,12 @@
 			name: username,
 			day: new Date().toISOString().split("T")[0],
 		});
+		setItem(localStorageName, localStor);
+		return localStor;
+	}
+
+	function userDataIsReal(localStor, userid) {
+		localStor[userid].isRead = true;
 		setItem(localStorageName, localStor);
 		return localStor;
 	}
@@ -286,7 +293,7 @@
 			const userid = d.querySelector(".userid").textContent;
 			const username = d.querySelector(".username").textContent.trim();
 			const localStor = await searchUsername(userid, username);
-			d.appendChild(mainDiv(localStor[userid]));
+			d.appendChild(mainDiv(localStor, userid));
 		}
 	}
 
@@ -300,7 +307,7 @@
 			if (!userid) continue;
 			const username = contentUser.textContent.trim();
 			const localStor = await searchUsername(userid, username);
-			contentUser.appendChild(replyDiv(localStor[userid], contentUser));
+			contentUser.appendChild(replyDiv(localStor, userid, contentUser));
 			d.style.overflow = "unset";
 			d.setAttribute("data-modified", "true");
 		}
