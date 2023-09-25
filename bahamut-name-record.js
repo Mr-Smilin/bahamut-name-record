@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
 // @namespace    https://smilin.net
-// @version      0.8
+// @version      0.9
 // @description  對天尊特攻寶具
 // @author       smilin
 // @match        https://forum.gamer.com.tw/C.php*
@@ -113,15 +113,22 @@
 		return td;
 	}
 
-	function clickButton() {
+	function clickButton(localStor) {
 		const button = document.createElement("button");
 		button.type = "button";
 		button.className = "usertitle";
 		button.setAttribute("isshow", "false");
 		button.style.borderWidth = "0px";
 		button.style.padding = "1px 6px";
+		// 未讀高亮
+		if (!localStor.isRead) {
+			notReadStyle(button, 0);
+		}
 		button.onclick = function () {
 			showMessage(this);
+			// 已讀關閉高亮
+			localStor.isRead = true;
+			isReadStyle(button, 0);
 		};
 		button.textContent = "歷史紀錄";
 		return button;
@@ -129,12 +136,13 @@
 
 	const mainDiv = (localStor) => {
 		const names = nameList(localStor);
+		const buttoned = clickButton(localStor);
 		const div = document.createElement("div");
 		div.className = "name-list-main-div";
 		div.style.position = "relative";
 		div.style.display = "inline";
 
-		div.appendChild(clickButton());
+		div.appendChild(buttoned);
 		div.appendChild(names);
 
 		return div;
@@ -146,9 +154,19 @@
 		div.style.position = "relative";
 		div.style.display = "inline";
 
-		const names = nameList(localStor);
-		setHoverShow(contentUser, names);
+		const readText = document.createElement("span");
 
+		// 未讀高亮
+		if (!localStor.isRead) notReadStyle(readText, 1);
+
+		const names = nameList(localStor);
+		setHoverShow(contentUser, names, () => {
+			// 已讀關閉高亮
+			localStor.isRead = true;
+			isReadStyle(readText, 1);
+		});
+
+		div.appendChild(readText);
 		div.appendChild(names);
 
 		return div;
@@ -156,19 +174,45 @@
 	//#endregion
 
 	//#region 一些 DOM 模組化的效果
-	function setHoverShow(triggerElement, targetElement) {
+	function setHoverShow(triggerElement, targetElement, callback = () => {}) {
 		// 初始隱藏 target 元素
 		targetElement.style.display = "none";
 
 		// 當 trigger 元素被滑過時，顯示 target 元素
 		triggerElement.addEventListener("mouseover", function () {
 			targetElement.style.display = "block";
+			callback();
 		});
 
 		// 當滑鼠離開 trigger 元素時，隱藏 target 元素
 		triggerElement.addEventListener("mouseout", function () {
 			targetElement.style.display = "none";
 		});
+	}
+
+	// type 0 = 發文 1 = 留言
+	function notReadStyle(element, type = 0) {
+		if (type === 0) {
+			element.style.borderWidth = "1px";
+			element.style.borderColor = "#e66465 #9198e5 #9198e5 #e66465";
+		} else if (type === 1) {
+			element.textContent = "???";
+			element.style.paddingLeft = "4px";
+			element.style.color = "red";
+			element.style.background =
+				"-webkit-linear-gradient(45deg, rgb(253,18,226) 20%, rgb(164,67,221), rgb(84,126,255) 90% )";
+			element.style.webkitBackgroundClip = "text";
+			element.style.webkitTextFillColor = "transparent";
+		}
+	}
+
+	function isReadStyle(element, type = 0) {
+		if (type === 0) {
+			element.style.borderWidth = "0px";
+		} else if (type === 1) {
+			element.innerText = "";
+			element.style.paddingLeft = "0px";
+		}
 	}
 	//#endregion
 
@@ -194,6 +238,7 @@
 
 	function addUsername(userid, username, localStor) {
 		localStor[userid].lastUpdated = new Date().toISOString().split("T")[0];
+		localStor[userid].isRead = false;
 		localStor[userid].data.push({
 			name: username,
 			day: new Date().toISOString().split("T")[0],
