@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
 // @namespace    https://forum.gamer.com.tw
-// @version      0.7
+// @version      0.8
 // @description  對天尊特攻寶具
 // @author       You
 // @match        https://forum.gamer.com.tw/C.php*
@@ -11,7 +11,7 @@
 // ==/UserScript==
 
 (function () {
-	if (typeof Storage === "undefined") return;
+	if (typeof indexedDB === "undefined") return;
 	if (!document.querySelector(".c-post__header__author")) return;
 
 	//#region indexedDB
