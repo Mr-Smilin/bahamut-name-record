@@ -1,9 +1,9 @@
 // ==UserScript==
 // @name         巴友暱稱紀錄
-// @namespace    https://forum.gamer.com.tw
+// @namespace    https://smilin.net
 // @version      0.8
 // @description  對天尊特攻寶具
-// @author       You
+// @author       smilin
 // @match        https://forum.gamer.com.tw/C.php*
 // @match        https://forum.gamer.com.tw/Co.php*
 // @grant        none
