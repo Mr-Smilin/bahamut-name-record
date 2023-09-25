@@ -5,7 +5,7 @@
 // @author       smilin
 // @version      0.9
 // @license MIT
-// @homepage     https://smilin.net
+// @homepage     https://home.gamer.com.tw/homeindex.php?owner=a33073307
 // @match        https://forum.gamer.com.tw/C.php*
 // @match        https://forum.gamer.com.tw/Co.php*
 // @icon         https://forum.gamer.com.tw/favicon.ico
