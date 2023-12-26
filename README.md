@@ -5,6 +5,8 @@
 最後修改日期： 2023/09/23  
 作者： smilin （微笑）
 
+# [演示網址](https://home.gamer.com.tw/artwork.php?sn=5800119)
+
 [油猴](https://greasyfork.org/zh-TW/scripts/475916-%E5%B7%B4%E5%8F%8B%E6%9A%B1%E7%A8%B1%E7%B4%80%E9%8C%84)  
 [Github](https://github.com/Mr-Smilin/bahamut-name-record)
 
@@ -42,3 +44,9 @@
 
 - [ ] 查詢功能
 - [ ] 備註替換暱稱功能
+
+<br>
+
+作者的其他腳本
+
+[巴友 IP 紀錄](https://greasyfork.org/zh-TW/scripts/483109-%E5%B7%B4%E5%8F%8Bip%E7%B4%80%E9%8C%84)
