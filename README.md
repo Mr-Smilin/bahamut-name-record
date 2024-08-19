@@ -49,4 +49,5 @@
 
 作者的其他腳本
 
-[巴友 IP 紀錄](https://greasyfork.org/zh-TW/scripts/483109-%E5%B7%B4%E5%8F%8Bip%E7%B4%80%E9%8C%84)
+[巴友 IP 紀錄](https://greasyfork.org/zh-TW/scripts/483109-%E5%B7%B4%E5%8F%8Bip%E7%B4%80%E9%8C%84)  
+[巴哈圖片預覽](https://greasyfork.org/zh-TW/scripts/504221-%E5%B7%B4%E5%93%88%E5%9C%96%E7%89%87%E9%A0%90%E8%A6%BD)
